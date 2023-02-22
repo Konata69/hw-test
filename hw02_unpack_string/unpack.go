@@ -13,6 +13,19 @@ type Symbol struct {
 	IsSlash  bool
 }
 
+func (s *Symbol) escape() {
+	s.IsSlash = false
+	s.IsDigit = false
+	s.IsLetter = true
+}
+
+func (s *Symbol) setSlash() {
+	s.Value = 0
+	s.IsSlash = true
+	s.IsDigit = false
+	s.IsLetter = false
+}
+
 var ErrInvalidString = errors.New("invalid string")
 
 func Unpack(input string) (string, error) {
@@ -26,6 +39,10 @@ func Unpack(input string) (string, error) {
 			IsSlash:  val == []rune(`\`)[0],
 		}
 		isLast := i == len(input)-1
+
+		if prev.IsSlash {
+			current.escape()
+		}
 
 		if current.IsLetter {
 			if prev.Value > 0 {
@@ -46,6 +63,14 @@ func Unpack(input string) (string, error) {
 			} else {
 				return "", ErrInvalidString
 			}
+		}
+
+		if current.IsSlash {
+			if prev.Value > 0 {
+				sb.WriteRune(prev.Value)
+			}
+
+			prev.setSlash()
 		}
 	}
 
