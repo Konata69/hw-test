@@ -40,6 +40,10 @@ func Unpack(input string) (string, error) {
 		}
 		isLast := i == len(input)-1
 
+		if isLast && current.IsSlash && !prev.IsSlash {
+			return "", ErrInvalidString
+		}
+
 		if prev.IsSlash {
 			current.escape()
 		}
