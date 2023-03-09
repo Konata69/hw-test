@@ -2,6 +2,7 @@ package hw03frequencyanalysis
 
 import (
 	"regexp"
+	"strings"
 	//"strings"
 )
 
@@ -49,9 +50,24 @@ func Top10(text string) []string {
 	// сортировать мапу по значению и лексикографически
 	// взять первые 10 слов
 
-	re := regexp.MustCompile(`\s+`)
+	text = strings.ToLower(text)
 
-	splited := re.Split(text, -1)
+	re := regexp.MustCompile(`[А-Яа-я-]+`)
+
+	splited := re.FindAllString(text, -1)
+
+	words := map[string]int{}
+
+	for _, word := range splited {
+		_, ok := words[word]
+		if ok {
+			words[word]++
+		} else {
+			words[word] = 1
+		}
+	}
+
+	delete(words, "-")
 
 	return splited
 }
