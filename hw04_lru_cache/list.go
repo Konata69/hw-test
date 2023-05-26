@@ -88,7 +88,10 @@ func (l *list) Remove(i *ListItem) {
 	if i.Prev != nil {
 		i.Prev.Next = i.Next
 	}
-	l.len--
+	_, ok := l.itemsMap[i]
+	if ok {
+		l.len--
+	}
 	delete(l.itemsMap, i)
 }
 
@@ -101,6 +104,9 @@ func (l *list) MoveToFront(i *ListItem) {
 		i.Next.Prev = i.Prev
 	}
 	if i.Prev != nil {
+		if i.Next == nil {
+			l.back = i.Prev
+		}
 		i.Prev.Next = i.Next
 	}
 

@@ -50,7 +50,49 @@ func TestCache(t *testing.T) {
 	})
 
 	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+		c := NewCache(5)
+		c.Set("aaa", 100)
+		c.Clear()
+
+		_, ok := c.Get("aaa")
+		require.False(t, ok)
+	})
+
+	t.Run("pop logic", func(t *testing.T) {
+		c := NewCache(2)
+		c.Set("aaa", 100)
+		c.Set("bbb", 200)
+		c.Set("ccc", 300)
+
+		_, ok := c.Get("aaa")
+		require.False(t, ok)
+
+		val, ok := c.Get("bbb")
+		require.True(t, ok)
+		require.Equal(t, 200, val)
+
+		val, ok = c.Get("ccc")
+		require.True(t, ok)
+		require.Equal(t, 300, val)
+	})
+
+	t.Run("pop rotation logic", func(t *testing.T) {
+		c := NewCache(2)
+		c.Set("aaa", 100)
+		c.Set("bbb", 200)
+		c.Get("aaa")
+		c.Set("ccc", 300)
+
+		_, ok := c.Get("bbb")
+		require.False(t, ok)
+
+		val, ok := c.Get("aaa")
+		require.True(t, ok)
+		require.Equal(t, 100, val)
+
+		val, ok = c.Get("ccc")
+		require.True(t, ok)
+		require.Equal(t, 300, val)
 	})
 }
 
