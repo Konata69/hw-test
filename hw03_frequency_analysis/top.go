@@ -14,24 +14,18 @@ type sortItem struct {
 func Top10(text string) []string {
 	text = strings.ToLower(text)
 
-	re := regexp.MustCompile(`[А-Яа-я-]+`)
+	re := regexp.MustCompile(`[А-Яа-я]+(?:-?[А-Яа-я]+)*`)
 
 	splited := re.FindAllString(text, -1)
 
 	words := map[string]int{}
 
 	for _, word := range splited {
-		_, ok := words[word]
-		if ok {
-			words[word]++
-		} else {
-			words[word] = 1
-		}
+		words[word]++
 	}
 
 	slice := make([]sortItem, 0)
 
-	delete(words, "-")
 	for key, word := range words {
 		item := sortItem{key: key, value: word}
 		slice = append(slice, item)
