@@ -29,7 +29,7 @@ func (s *Symbol) setSlash() {
 var ErrInvalidString = errors.New("invalid string")
 
 func Unpack(input string) (string, error) {
-	var sb strings.Builder
+	var result strings.Builder
 	var prev Symbol
 	for i, val := range input {
 		current := Symbol{
