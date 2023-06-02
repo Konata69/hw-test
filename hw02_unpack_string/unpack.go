@@ -36,7 +36,7 @@ func Unpack(input string) (string, error) {
 			Value:    val,
 			IsLetter: unicode.IsLetter(val),
 			IsDigit:  unicode.IsDigit(val),
-			IsSlash:  val == []rune(`\`)[0],
+			IsSlash:  val == '\\',
 		}
 		isLast := i == len(input)-1
 
