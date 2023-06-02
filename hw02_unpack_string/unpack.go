@@ -33,10 +33,10 @@ func Unpack(input string) (string, error) {
 	var prev Symbol
 	for i, currRune := range input {
 		current := Symbol{
-			Value:    val,
-			IsLetter: unicode.IsLetter(val),
-			IsDigit:  unicode.IsDigit(val),
-			IsSlash:  val == '\\',
+			Value:    currRune,
+			IsLetter: unicode.IsLetter(currRune),
+			IsDigit:  unicode.IsDigit(currRune),
+			IsSlash:  currRune == '\\',
 		}
 		isLast := i == len(input)-1
 
@@ -50,10 +50,10 @@ func Unpack(input string) (string, error) {
 
 		if current.IsLetter {
 			if prev.Value > 0 {
-				sb.WriteRune(prev.Value)
+				result.WriteRune(prev.Value)
 			}
 			if isLast {
-				sb.WriteRune(current.Value)
+				result.WriteRune(current.Value)
 			}
 
 			prev = current
@@ -61,7 +61,7 @@ func Unpack(input string) (string, error) {
 		if current.IsDigit {
 			if prev.Value > 0 {
 				for i := 0; i < int(current.Value-'0'); i++ {
-					sb.WriteRune(prev.Value)
+					result.WriteRune(prev.Value)
 				}
 				prev.Value = 0
 			} else {
@@ -71,12 +71,12 @@ func Unpack(input string) (string, error) {
 
 		if current.IsSlash {
 			if prev.Value > 0 {
-				sb.WriteRune(prev.Value)
+				result.WriteRune(prev.Value)
 			}
 
 			prev.setSlash()
 		}
 	}
 
-	return sb.String(), nil
+	return result.String(), nil
 }
