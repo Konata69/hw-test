@@ -31,7 +31,7 @@ var ErrInvalidString = errors.New("invalid string")
 func Unpack(input string) (string, error) {
 	var result strings.Builder
 	var prev Symbol
-	for i, val := range input {
+	for i, currRune := range input {
 		current := Symbol{
 			Value:    val,
 			IsLetter: unicode.IsLetter(val),
