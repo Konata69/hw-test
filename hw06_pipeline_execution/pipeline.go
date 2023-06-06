@@ -9,33 +9,30 @@ type (
 type Stage func(in In) (out Out)
 
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
-	// Place your code here.
-
-	// стейджы для одного значения должны выполняться последовательно
-	// но обработка всех стейджей всех значений должна занимать меньше времени, чем последовательная обработка
-
-	out := getOut(in)
+	out := GetReadOnlyChannel(in)
 
 	for _, stage := range stages {
-		select {
-		default:
-			out = stage(getOut(out))
-		}
+		out = stage(GetReadOnlyChannel(out))
 	}
 
 	return out
 }
 
-func getOut(in In) Out {
-	bi := make(Bi)
-	go func() {
+func GetReadOnlyChannel(in In) Out {
+	tmpChannel := make(Bi)
+
+	go func(tmpChannel Bi) {
+		defer close(tmpChannel)
 		for {
 			select {
-			case v, _ := <-in:
-				bi <- v
+			case val, ok := <-in:
+				if !ok {
+					return
+				}
+				tmpChannel <- val
 			}
 		}
-	}()
+	}(tmpChannel)
 
-	return bi
+	return tmpChannel
 }
