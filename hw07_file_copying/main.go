@@ -5,6 +5,8 @@ import (
 	"io"
 	"log"
 	"os"
+
+	"github.com/cheggaaa/pb/v3"
 )
 
 var (
@@ -58,9 +60,14 @@ func main() {
 	checkErr(err)
 	defer fileTo.Close()
 
-	_, err = io.CopyN(fileTo, fileFrom, limit)
+	bar := pb.Simple.Start64(limit)
+	barReader := bar.NewProxyReader(fileFrom)
+
+	_, err = io.CopyN(fileTo, barReader, limit)
 	if err == io.EOF {
 		err = nil
 	}
 	checkErr(err)
+
+	bar.Finish()
 }
