@@ -42,6 +42,18 @@ func main() {
 	checkErr(err)
 	defer fileFrom.Close()
 
+	fileInfo, err := fileFrom.Stat()
+	checkErr(err)
+	size := fileInfo.Size()
+
+	if offset > size {
+		log.Fatal(err)
+	}
+
+	if offset > 0 {
+		fileFrom.Seek(offset, 0)
+	}
+
 	fileTo, err := os.Create(to)
 	checkErr(err)
 	defer fileTo.Close()
