@@ -48,4 +48,18 @@ func TestList(t *testing.T) {
 		}
 		require.Equal(t, []int{70, 80, 60, 40, 10, 30, 50}, elems)
 	})
+
+	t.Run("remove element not in list", func(t *testing.T) {
+		l := NewList()
+		elem := &ListItem{
+			Value: 10,
+			Next:  nil,
+			Prev:  nil,
+		}
+		l.Remove(elem)
+
+		require.Equal(t, 0, l.Len())
+		require.Nil(t, l.Front())
+		require.Nil(t, l.Back())
+	})
 }
