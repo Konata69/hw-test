@@ -2,6 +2,9 @@ package main
 
 import (
 	"flag"
+	"io"
+	"log"
+	"os"
 )
 
 var (
@@ -16,7 +19,36 @@ func init() {
 	flag.Int64Var(&offset, "offset", 0, "offset in input file")
 }
 
+func checkErr(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
 	flag.Parse()
-	// Place your code here.
+
+	if limit == 0 {
+		byteBuffer, err := os.ReadFile(from)
+		checkErr(err)
+
+		err = os.WriteFile(to, byteBuffer, 0644)
+		checkErr(err)
+
+		return
+	}
+
+	fileFrom, err := os.Open(from)
+	checkErr(err)
+	defer fileFrom.Close()
+
+	fileTo, err := os.Create(to)
+	checkErr(err)
+	defer fileTo.Close()
+
+	_, err = io.CopyN(fileTo, fileFrom, limit)
+	if err == io.EOF {
+		err = nil
+	}
+	checkErr(err)
 }
