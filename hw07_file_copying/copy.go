@@ -26,8 +26,8 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 	}
 
 	fileFrom, err := os.Open(fromPath)
-	checkErr(err)
 	defer fileFrom.Close()
+	checkErr(err)
 
 	fileInfo, err := fileFrom.Stat()
 	checkErr(err)
@@ -42,8 +42,8 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 	}
 
 	fileTo, err := os.Create(toPath)
-	checkErr(err)
 	defer fileTo.Close()
+	checkErr(err)
 
 	bar := pb.Simple.Start64(limit)
 	barReader := bar.NewProxyReader(fileFrom)
