@@ -2,7 +2,6 @@ package main
 
 import (
 	"io"
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -15,11 +14,11 @@ func TestCopy(t *testing.T) {
 		return
 	}
 
-	fileFrom, err := ioutil.ReadFile("testdata/input.txt")
+	fileFrom, err := os.ReadFile("testdata/input.txt")
 	if err != nil {
 		return
 	}
-	fileTo, err := ioutil.ReadFile("out.txt")
+	fileTo, err := os.ReadFile("out.txt")
 	if err != nil {
 		return
 	}
@@ -44,7 +43,7 @@ func TestCopyLimit10(t *testing.T) {
 		return
 	}
 
-	fileTo, err := ioutil.ReadFile("out.txt")
+	fileTo, err := os.ReadFile("out.txt")
 	if err != nil {
 		return
 	}
@@ -69,7 +68,7 @@ func TestCopyLimit1000(t *testing.T) {
 		return
 	}
 
-	fileTo, err := ioutil.ReadFile("out.txt")
+	fileTo, err := os.ReadFile("out.txt")
 	if err != nil {
 		return
 	}
@@ -94,7 +93,7 @@ func TestCopyLimit10000(t *testing.T) {
 		return
 	}
 
-	fileTo, err := ioutil.ReadFile("out.txt")
+	fileTo, err := os.ReadFile("out.txt")
 	if err != nil {
 		return
 	}
@@ -128,7 +127,7 @@ func TestCopyLimit1000Offset100(t *testing.T) {
 		return
 	}
 
-	fileTo, err := ioutil.ReadFile("out.txt")
+	fileTo, err := os.ReadFile("out.txt")
 	if err != nil {
 		return
 	}
@@ -158,7 +157,7 @@ func TestCopyLimit1000Offset6000(t *testing.T) {
 		return
 	}
 
-	fileTo, err := ioutil.ReadFile("out.txt")
+	fileTo, err := os.ReadFile("out.txt")
 	if err != nil {
 		return
 	}
