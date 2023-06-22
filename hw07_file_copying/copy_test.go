@@ -16,7 +16,13 @@ func TestCopy(t *testing.T) {
 	}
 
 	fileFrom, err := ioutil.ReadFile("testdata/input.txt")
+	if err != nil {
+		return
+	}
 	fileTo, err := ioutil.ReadFile("out.txt")
+	if err != nil {
+		return
+	}
 
 	require.Equal(t, fileFrom, fileTo)
 }
@@ -29,10 +35,19 @@ func TestCopyLimit10(t *testing.T) {
 	}
 
 	fileFrom, err := os.Open("testdata/input.txt")
+	if err != nil {
+		return
+	}
 	fileFromBytes := make([]byte, limitBytes)
 	_, err = io.ReadFull(fileFrom, fileFromBytes)
+	if err != nil {
+		return
+	}
 
 	fileTo, err := ioutil.ReadFile("out.txt")
+	if err != nil {
+		return
+	}
 
 	require.Equal(t, fileFromBytes, fileTo)
 }
@@ -45,10 +60,19 @@ func TestCopyLimit1000(t *testing.T) {
 	}
 
 	fileFrom, err := os.Open("testdata/input.txt")
+	if err != nil {
+		return
+	}
 	fileFromBytes := make([]byte, limitBytes)
 	_, err = io.ReadFull(fileFrom, fileFromBytes)
+	if err != nil {
+		return
+	}
 
 	fileTo, err := ioutil.ReadFile("out.txt")
+	if err != nil {
+		return
+	}
 
 	require.Equal(t, fileFromBytes, fileTo)
 }
@@ -61,10 +85,19 @@ func TestCopyLimit10000(t *testing.T) {
 	}
 
 	fileFrom, err := os.Open("testdata/input.txt")
+	if err != nil {
+		return
+	}
 	fileFromBytes := make([]byte, limitBytes)
 	_, err = io.ReadFull(fileFrom, fileFromBytes)
+	if err != nil {
+		return
+	}
 
 	fileTo, err := ioutil.ReadFile("out.txt")
+	if err != nil {
+		return
+	}
 
 	if len(fileFromBytes) > len(fileTo) {
 		fileFromBytes = fileFromBytes[:len(fileTo)]
@@ -82,11 +115,23 @@ func TestCopyLimit1000Offset100(t *testing.T) {
 	}
 
 	fileFrom, err := os.Open("testdata/input.txt")
+	if err != nil {
+		return
+	}
 	_, err = fileFrom.Seek(offsetBytes, 0)
+	if err != nil {
+		return
+	}
 	fileFromBytes := make([]byte, limitBytes)
 	_, err = io.ReadFull(fileFrom, fileFromBytes)
+	if err != nil {
+		return
+	}
 
 	fileTo, err := ioutil.ReadFile("out.txt")
+	if err != nil {
+		return
+	}
 
 	require.Equal(t, fileFromBytes, fileTo)
 }
@@ -100,11 +145,23 @@ func TestCopyLimit1000Offset6000(t *testing.T) {
 	}
 
 	fileFrom, err := os.Open("testdata/input.txt")
+	if err != nil {
+		return
+	}
 	_, err = fileFrom.Seek(offsetBytes, 0)
+	if err != nil {
+		return
+	}
 	fileFromBytes := make([]byte, limitBytes)
 	_, err = io.ReadFull(fileFrom, fileFromBytes)
+	if err != nil {
+		return
+	}
 
 	fileTo, err := ioutil.ReadFile("out.txt")
+	if err != nil {
+		return
+	}
 
 	if len(fileFromBytes) > len(fileTo) {
 		fileFromBytes = fileFromBytes[:len(fileTo)]
