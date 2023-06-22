@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"io"
-	"log"
 	"os"
 
 	"github.com/cheggaaa/pb/v3"
@@ -17,24 +16,32 @@ var (
 func Copy(fromPath, toPath string, offset, limit int64) error {
 	if limit == 0 {
 		byteBuffer, err := os.ReadFile(fromPath)
-		checkErr(err)
+		if err != nil {
+			return err
+		}
 
 		err = os.WriteFile(toPath, byteBuffer, 0644)
-		checkErr(err)
+		if err != nil {
+			return err
+		}
 
 		return err
 	}
 
 	fileFrom, err := os.Open(fromPath)
 	defer fileFrom.Close()
-	checkErr(err)
+	if err != nil {
+		return err
+	}
 
 	fileInfo, err := fileFrom.Stat()
-	checkErr(err)
+	if err != nil {
+		return err
+	}
 	size := fileInfo.Size()
 
 	if offset > size {
-		log.Fatal(ErrOffsetExceedsFileSize)
+		return ErrOffsetExceedsFileSize
 	}
 
 	if offset > 0 {
@@ -43,7 +50,9 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 
 	fileTo, err := os.Create(toPath)
 	defer fileTo.Close()
-	checkErr(err)
+	if err != nil {
+		return err
+	}
 
 	bar := pb.Simple.Start64(limit)
 	barReader := bar.NewProxyReader(fileFrom)
@@ -52,7 +61,9 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 	if err == io.EOF {
 		err = nil
 	}
-	checkErr(err)
+	if err != nil {
+		return err
+	}
 
 	bar.Finish()
 
