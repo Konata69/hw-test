@@ -2,11 +2,7 @@ package main
 
 import (
 	"flag"
-	"io"
 	"log"
-	"os"
-
-	"github.com/cheggaaa/pb/v3"
 )
 
 var (
@@ -30,44 +26,6 @@ func checkErr(err error) {
 func main() {
 	flag.Parse()
 
-	if limit == 0 {
-		byteBuffer, err := os.ReadFile(from)
-		checkErr(err)
-
-		err = os.WriteFile(to, byteBuffer, 0644)
-		checkErr(err)
-
-		return
-	}
-
-	fileFrom, err := os.Open(from)
+	err := Copy(from, to, offset, limit)
 	checkErr(err)
-	defer fileFrom.Close()
-
-	fileInfo, err := fileFrom.Stat()
-	checkErr(err)
-	size := fileInfo.Size()
-
-	if offset > size {
-		log.Fatal(err)
-	}
-
-	if offset > 0 {
-		fileFrom.Seek(offset, 0)
-	}
-
-	fileTo, err := os.Create(to)
-	checkErr(err)
-	defer fileTo.Close()
-
-	bar := pb.Simple.Start64(limit)
-	barReader := bar.NewProxyReader(fileFrom)
-
-	_, err = io.CopyN(fileTo, barReader, limit)
-	if err == io.EOF {
-		err = nil
-	}
-	checkErr(err)
-
-	bar.Finish()
 }
