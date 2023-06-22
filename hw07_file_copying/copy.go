@@ -20,7 +20,7 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 			return err
 		}
 
-		err = os.WriteFile(toPath, byteBuffer, 0644)
+		err = os.WriteFile(toPath, byteBuffer, 0o644)
 		if err != nil {
 			return err
 		}
