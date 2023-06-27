@@ -26,6 +26,23 @@ func TestCopy(t *testing.T) {
 	require.Equal(t, fileFrom, fileTo)
 }
 
+func TestCopySamePath(t *testing.T) {
+	err := Copy("testdata/input.txt", "testdata/input.txt", 0, 0)
+	require.ErrorContains(t, err, ErrCopyToSameFile.Error())
+	if err != nil {
+		return
+	}
+
+	_, err = os.ReadFile("testdata/input.txt")
+	if err != nil {
+		return
+	}
+	_, err = os.ReadFile("testdata/input.txt")
+	if err != nil {
+		return
+	}
+}
+
 func TestCopyLimit10(t *testing.T) {
 	limitBytes := int64(10)
 	err := Copy("testdata/input.txt", "out.txt", 0, limitBytes)

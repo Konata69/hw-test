@@ -11,9 +11,13 @@ import (
 var (
 	ErrUnsupportedFile       = errors.New("unsupported file")
 	ErrOffsetExceedsFileSize = errors.New("offset exceeds file size")
+	ErrCopyToSameFile        = errors.New("copy to same file")
 )
 
 func Copy(fromPath, toPath string, offset, limit int64) error {
+	if fromPath == toPath {
+		return ErrCopyToSameFile
+	}
 	if limit == 0 {
 		byteBuffer, err := os.ReadFile(fromPath)
 		if err != nil {
