@@ -26,12 +26,19 @@ func ReadDir(dir string) (Environment, error) {
 
 	envMap := make(Environment)
 	for _, entry := range dirEntry {
-		info, _ := entry.Info()
+		if entry.IsDir() {
+			continue
+		}
+
+		info, err := entry.Info()
+		if err != nil {
+			return envMap, err
+		}
 
 		path := dir + "/" + info.Name()
 		file, err := os.Open(path)
 		if err != nil {
-			return nil, err
+			return envMap, err
 		}
 		defer file.Close()
 
