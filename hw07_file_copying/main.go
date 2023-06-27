@@ -17,15 +17,11 @@ func init() {
 	flag.Int64Var(&offset, "offset", 0, "offset in input file")
 }
 
-func checkErr(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func main() {
 	flag.Parse()
 
 	err := Copy(from, to, offset, limit)
-	checkErr(err)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
