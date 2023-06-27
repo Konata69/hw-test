@@ -55,14 +55,13 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 	defer fileTo.Close()
 
 	bar := pb.Simple.Start64(limit)
+	defer bar.Finish()
 	barReader := bar.NewProxyReader(fileFrom)
 
 	_, err = io.CopyN(fileTo, barReader, limit)
 	if err != nil && !errors.Is(err, io.EOF) {
 		return err
 	}
-
-	bar.Finish()
 
 	return nil
 }
